@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useCategories } from '../../hooks/useCategories';
 import { useFilters } from '../../context/FilterContext';
 
@@ -20,8 +19,8 @@ const CategoryFilter: React.FC = () => {
   }
 
   // Ensure categories are strings, handle both string and object responses
-  const categoryList = categories.map((cat) =>
-    typeof cat === 'string' ? cat : cat.slug || cat.name || String(cat)
+  const categoryList = categories.map((cat: string) =>
+    typeof cat === 'string' ? cat : (cat as any).slug || (cat as any).name || String(cat)
   );
 
   return (

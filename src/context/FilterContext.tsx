@@ -1,6 +1,5 @@
 import React, { createContext, useReducer, type ReactNode } from 'react';
 import { type FilterState, type FilterAction, type Product } from '../types';
-import { PRODUCTS_PER_PAGE } from '../utils/constants';
 
 const initialState: FilterState = {
   selectedCategory: null,

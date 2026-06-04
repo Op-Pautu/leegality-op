@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <FilterProvider>
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-white flex flex-col">
           <Header />
           <main className="flex-1">
             <Routes>

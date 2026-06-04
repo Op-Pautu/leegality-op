@@ -20,8 +20,8 @@ export const useCategories = (): UseCategoriesReturn => {
       const data = await getCategories();
       // Handle both array of strings and array of objects
       const catList = Array.isArray(data)
-        ? data.map((cat) =>
-          typeof cat === 'string' ? cat : cat.slug || cat.name || String(cat)
+        ? data.map((cat: string) =>
+          typeof cat === 'string' ? cat : (cat as any).slug || (cat as any).name || String(cat)
         )
         : [];
       setCategories(catList);

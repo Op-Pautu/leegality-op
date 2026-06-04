@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFilters } from '../../context/FilterContext';
 
 const PriceFilter: React.FC = () => {
