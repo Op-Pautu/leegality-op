@@ -88,7 +88,7 @@ const ProductDetailPage: React.FC = () => {
 
           <div className="flex items-center gap-4">
             <span className="text-2xl font-bold text-[#111827]">${product.price.toFixed(2)}</span>
-            <StarRating rating={product.rating} count={product.rating} size={18} />
+            <StarRating rating={product.rating} size={18} />
           </div>
 
           <div className="flex flex-col gap-1 text-sm">
@@ -120,6 +120,26 @@ const ProductDetailPage: React.FC = () => {
           </div>
 
           <hr className="border-[#e5e7eb]" />
+
+          {product.reviews && product.reviews.length > 0 && (
+            <>
+              <div>
+                <h2 className="text-lg font-bold text-[#111827] mb-4">Reviews</h2>
+                <div className="flex flex-col gap-5">
+                  {product.reviews.map((review, i) => (
+                    <div key={i}>
+                      <div className="flex items-center gap-3 mb-1">
+                        <span className="text-sm font-semibold text-[#111827]">{review.reviewerName}</span>
+                        <StarRating rating={review.rating} size={13} />
+                      </div>
+                      <p className="text-sm text-[#6b7280] leading-relaxed">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <hr className="border-[#e5e7eb]" />
+            </>
+          )}
 
           <button
             disabled={product.stock === 0}

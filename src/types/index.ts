@@ -1,3 +1,9 @@
+export interface Review {
+  rating: number;
+  comment: string;
+  reviewerName: string;
+}
+
 export interface Product {
   id: number;
   title: string;
@@ -10,6 +16,7 @@ export interface Product {
   images: string[];
   stock: number;
   discountPercentage?: number;
+  reviews?: Review[];
 }
 
 export interface Category {

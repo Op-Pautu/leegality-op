@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <span className="text-[15px] font-bold text-[#111827]">
           ${product.price.toFixed(2)}
         </span>
-        <StarRating rating={product.rating} count={product.rating} />
+        <StarRating rating={product.rating} />
       </div>
     </div>
   );

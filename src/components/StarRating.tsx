@@ -2,11 +2,11 @@ import { Star } from 'lucide-react';
 
 interface StarRatingProps {
   rating: number;
-  count?: number | null;
+  showScore?: boolean;
   size?: number;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, count, size = 14 }) => {
+const StarRating: React.FC<StarRatingProps> = ({ rating, showScore = true, size = 14 }) => {
   const stars = [];
   const fullStars = Math.floor(rating);
   const hasHalf = rating % 1 >= 0.3;
@@ -31,7 +31,7 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, count, size = 14 }) => 
   return (
     <div className="flex items-center gap-1">
       <div className="flex items-center gap-0.5">{stars}</div>
-      {count !== null && count !== undefined && (
+      {showScore && (
         <span className="text-xs text-[#6b7280]">({rating.toFixed(1)})</span>
       )}
     </div>
