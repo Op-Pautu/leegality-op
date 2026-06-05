@@ -29,7 +29,7 @@ The app will start at `http://localhost:5173`
 
 - Product listing with dynamic grid
 - Multi-criteria filtering (category, price range, brand)
-- Pagination (10 products per page)
+- Pagination (12 products per page)
 - Product detail page with full information
 - Filter state preservation on navigation
 - Responsive design (mobile, tablet, desktop)
@@ -67,9 +67,7 @@ Uses the public DummyJSON API:
 
 ## Improvements for Future
 
-- Add search functionality with debouncing
 - Implement wishlist/favorites feature
-- Add product reviews and ratings
 - Server-side pagination and filtering
 - Shopping cart functionality
 - User authentication
