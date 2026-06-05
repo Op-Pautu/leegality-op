@@ -1,10 +1,21 @@
+import { useState, useEffect } from 'react';
 import { Menu, Search, ShoppingCart, Clock, User } from 'lucide-react';
+import { useFilters } from '../context/FilterContext';
+import { useDebounce } from '../hooks/useDebounce';
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+  const { state, dispatch } = useFilters();
+  const [inputValue, setInputValue] = useState(state.searchQuery);
+  const debouncedSearch = useDebounce(inputValue, 400);
+
+  useEffect(() => {
+    dispatch({ type: 'SET_SEARCH', payload: debouncedSearch });
+  }, [debouncedSearch]);
+
   return (
     <header className="bg-[#1a2332] h-[72px] flex items-center px-6 sticky top-0 z-40 justify-between">
       <button
@@ -20,6 +31,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           <input
             type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder="Search products..."
             className="w-full h-10 pl-10 pr-4 rounded-full bg-white text-[#111827] text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#2d6bcf]/50"
           />
@@ -29,9 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       <div className="flex items-center gap-3 shrink-0">
         <button className="text-white p-2 rounded hover:bg-white/10 transition-colors relative shrink-0" aria-label="Cart">
           <ShoppingCart size={22} strokeWidth={2} />
-          <span className="absolute top-0 right-0 w-5 h-5 bg-[#2d6bcf] rounded-full text-[10px] font-semibold text-white flex items-center justify-center">
-            3
-          </span>
+          <span className="absolute top-0 right-0 w-5 h-5 bg-[#2d6bcf] rounded-full text-[10px] font-semibold text-white flex items-center justify-center">3</span>
         </button>
         <button className="text-white p-2 rounded hover:bg-white/10 transition-colors shrink-0" aria-label="History">
           <Clock size={22} strokeWidth={2} />
