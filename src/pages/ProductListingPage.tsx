@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFilters } from '../context/FilterContext';
 import { useProducts } from '../hooks/useProducts';
+import { useBrands } from '../hooks/useBrands';
 import FilterSidebar from '../components/Filters/FilterSidebar';
 import ProductGrid from '../components/ProductGrid';
 import Pagination from '../components/Pagination';
@@ -27,7 +28,8 @@ const ProductListingPage: React.FC<ProductListingPageProps> = ({ sidebarOpen, on
   }, []);
 
   const skip = (state.currentPage - 1) * 12;
-  const { products, allBrands, loading, error, totalPages } = useProducts(state.selectedCategory, skip, state.searchQuery);
+  const { products, loading, error, totalPages } = useProducts(state.selectedCategory, skip, state.searchQuery);
+  const allBrands = useBrands(state.selectedCategory);
   const filteredProducts = applyClientFilters(products);
 
   return (

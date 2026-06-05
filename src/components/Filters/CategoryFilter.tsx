@@ -1,23 +1,20 @@
 import { useCategories } from '../../hooks/useCategories';
 import { useFilters } from '../../context/FilterContext';
 
-const CategoryFilter: React.FC = () => {
+const CategoryFilter: React.FC<{ filterSearch?: string }> = ({ filterSearch = '' }) => {
   const { categories, loading, error } = useCategories();
   const { state, dispatch } = useFilters();
 
   const toggleCategory = (cat: string) => {
-    // We support single category selection via the API
     const current = state.selectedCategory;
     dispatch({ type: 'SET_CATEGORY', payload: current === cat ? null : cat });
   };
 
-  if (error) {
-    return <p className="text-red-500 text-sm">{error}</p>;
-  }
+  if (error) return <p className="text-red-500 text-sm">{error}</p>;
 
-  const categoryList = categories.map((cat: string) =>
-    typeof cat === 'string' ? cat : (cat as any).slug || (cat as any).name || String(cat)
-  );
+  const categoryList = categories
+    .map((cat: string) => typeof cat === 'string' ? cat : (cat as any).slug || (cat as any).name || String(cat))
+    .filter((cat) => cat.toLowerCase().includes(filterSearch.toLowerCase()));
 
   return (
     <section>

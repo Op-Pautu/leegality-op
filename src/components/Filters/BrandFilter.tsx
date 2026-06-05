@@ -2,18 +2,21 @@ import { useFilters } from '../../context/FilterContext';
 
 interface BrandFilterProps {
   brands: string[];
+  filterSearch?: string;
 }
 
-const BrandFilter: React.FC<BrandFilterProps> = ({ brands }) => {
+const BrandFilter: React.FC<BrandFilterProps> = ({ brands, filterSearch = '' }) => {
   const { state, dispatch } = useFilters();
 
-  if (brands.length === 0) return null;
+  const filtered = brands.filter((b) => b.toLowerCase().includes(filterSearch.toLowerCase()));
+
+  if (filtered.length === 0) return null;
 
   return (
     <section>
       <h3 className="text-sm font-semibold text-[#111827] mb-4">Brands</h3>
       <ul className="flex flex-col gap-3">
-        {brands.map((brand) => (
+        {filtered.map((brand) => (
           <li key={brand}>
             <label className="flex items-center gap-3 cursor-pointer group">
               <input

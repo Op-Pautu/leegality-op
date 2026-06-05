@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { X, Search } from 'lucide-react';
 import { useFilters } from '../../context/FilterContext';
 import CategoryFilter from './CategoryFilter';
@@ -12,6 +13,7 @@ interface FilterSidebarProps {
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, brands }) => {
   const { dispatch } = useFilters();
+  const [filterSearch, setFilterSearch] = useState('');
 
   if (!isOpen) return null;
 
@@ -40,14 +42,16 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, brands }
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
             <input
               type="text"
+              value={filterSearch}
+              onChange={(e) => setFilterSearch(e.target.value)}
               placeholder="Search..."
               className="w-full h-full pl-10 pr-3 rounded-lg border border-[#e5e7eb] text-sm text-[#111827] placeholder-gray-500 outline-none focus:border-[#2d6bcf] focus:ring-1 focus:ring-[#2d6bcf] transition-colors"
             />
           </div>
 
-          <CategoryFilter />
+          <CategoryFilter filterSearch={filterSearch} />
           <PriceFilter />
-          <BrandFilter brands={brands} />
+          <BrandFilter brands={brands} filterSearch={filterSearch} />
 
           <button
             onClick={() => dispatch({ type: 'RESET_FILTERS' })}
