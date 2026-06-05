@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, Search, ShoppingCart, Clock, User } from 'lucide-react';
 import { useFilters } from '../context/FilterContext';
 import { useDebounce } from '../hooks/useDebounce';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -11,9 +12,15 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { state, dispatch } = useFilters();
   const [inputValue, setInputValue] = useState(state.searchQuery);
   const debouncedSearch = useDebounce(inputValue, 400);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const onDetailPage = location.pathname.startsWith('/product/');
 
   useEffect(() => {
+    if (debouncedSearch === state.searchQuery) return;
     dispatch({ type: 'SET_SEARCH', payload: debouncedSearch });
+
+    if (onDetailPage && debouncedSearch) navigate('/');
   }, [debouncedSearch]);
 
   return (
