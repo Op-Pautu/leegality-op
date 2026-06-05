@@ -25,6 +25,7 @@ export interface FilterState {
   };
   selectedBrands: Set<string>;
   currentPage: number;
+  searchQuery: string;
 }
 
 export type FilterAction =
@@ -32,6 +33,7 @@ export type FilterAction =
   | { type: 'SET_PRICE'; payload: { min: number; max: number } }
   | { type: 'TOGGLE_BRAND'; payload: string }
   | { type: 'SET_PAGE'; payload: number }
+  | { type: 'SET_SEARCH'; payload: string }
   | { type: 'RESET_FILTERS' };
 
 export interface ApiResponse<T> {

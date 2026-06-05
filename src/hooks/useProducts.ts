@@ -15,7 +15,8 @@ interface UseProductsReturn {
 
 export const useProducts = (
   category: string | null = null,
-  skip: number = 0
+  skip: number = 0,
+  search: string = ''
 ): UseProductsReturn => {
   const [products, setProducts] = useState<Product[]>([]);
   const [allBrands, setAllBrands] = useState<string[]>([]);
@@ -27,13 +28,12 @@ export const useProducts = (
     setLoading(true);
     setError(null);
     try {
-      const data = await getProducts(PRODUCTS_PER_PAGE, skip, category || undefined);
+      const data = await getProducts(PRODUCTS_PER_PAGE, skip, category || undefined, search || undefined);
 
       const productList = data.products || [];
       setProducts(productList);
       setTotalProducts(data.total || 0);
 
-      // Extract unique brands
       const brands = Array.from(
         new Set(productList.map((p) => p.brand).filter(Boolean))
       ).sort();
@@ -47,7 +47,7 @@ export const useProducts = (
 
   useEffect(() => {
     fetchProducts();
-  }, [category, skip]);
+  }, [category, skip, search]);
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 

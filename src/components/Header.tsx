@@ -1,48 +1,44 @@
+import { Menu, Search, ShoppingCart, Clock, User } from 'lucide-react';
+
 interface HeaderProps {
-  onFilterClick?: () => void;
+  onMenuClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onFilterClick }) => {
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   return (
-    <header className="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
-      <div className="px-6 py-3 flex items-center justify-between gap-4">
-        {/* Menu Icon - opens filters on mobile */}
-        <button
-          onClick={onFilterClick}
-          className="text-white hover:text-gray-300 transition p-1 md:hidden"
-          title="Filters"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+    <header className="bg-[#1a2332] h-[72px] flex items-center px-6 sticky top-0 z-40 justify-between">
+      <button
+        onClick={onMenuClick}
+        className="text-white p-2 rounded hover:bg-white/10 transition-colors shrink-0"
+        aria-label="Open filters"
+      >
+        <Menu size={24} strokeWidth={2} />
+      </button>
 
-        {/* Logo */}
-        <div className="text-lg font-bold hidden sm:block">🛒 Store</div>
-
-        {/* Search Bar */}
-        <div className="flex-1 max-w-xl">
+      <div className="flex-1 max-w-md mx-4">
+        <div className="relative w-full">
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           <input
             type="text"
             placeholder="Search products..."
-            className="w-full px-4 py-2 rounded text-gray-900 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full h-10 pl-10 pr-4 rounded-full bg-white text-[#111827] text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#2d6bcf]/50"
           />
         </div>
+      </div>
 
-        {/* Right Icons */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          <button className="text-white hover:text-gray-300 transition p-1" title="Account">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
-          <button className="text-white hover:text-gray-300 transition p-1 relative" title="Cart">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            <span className="absolute -top-1 -right-1 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
-          </button>
-        </div>
+      <div className="flex items-center gap-3 shrink-0">
+        <button className="text-white p-2 rounded hover:bg-white/10 transition-colors relative shrink-0" aria-label="Cart">
+          <ShoppingCart size={22} strokeWidth={2} />
+          <span className="absolute top-0 right-0 w-5 h-5 bg-[#2d6bcf] rounded-full text-[10px] font-semibold text-white flex items-center justify-center">
+            3
+          </span>
+        </button>
+        <button className="text-white p-2 rounded hover:bg-white/10 transition-colors shrink-0" aria-label="History">
+          <Clock size={22} strokeWidth={2} />
+        </button>
+        <button className="text-white p-2 rounded hover:bg-white/10 transition-colors shrink-0" aria-label="Account">
+          <User size={22} strokeWidth={2} />
+        </button>
       </div>
     </header>
   );

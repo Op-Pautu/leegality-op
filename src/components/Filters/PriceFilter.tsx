@@ -3,15 +3,12 @@ import { useFilters } from '../../context/FilterContext';
 
 const PriceFilter: React.FC = () => {
   const { state, dispatch } = useFilters();
-  const [minInput, setMinInput] = useState(state.priceRange.min.toString());
-  const [maxInput, setMaxInput] = useState(
-    state.priceRange.max === Infinity ? '' : state.priceRange.max.toString()
-  );
+  const [minInput, setMinInput] = useState(state.priceRange.min > 0 ? state.priceRange.min.toString() : '');
+  const [maxInput, setMaxInput] = useState(state.priceRange.max === Infinity ? '' : state.priceRange.max.toString());
   const [error, setError] = useState<string | null>(null);
 
-  const handlePriceChange = () => {
+  const handleApply = () => {
     setError(null);
-
     const min = minInput === '' ? 0 : parseFloat(minInput);
     const max = maxInput === '' ? Infinity : parseFloat(maxInput);
 
@@ -19,40 +16,40 @@ const PriceFilter: React.FC = () => {
       setError('Please enter valid numbers');
       return;
     }
-
     if (min > max) {
-      setError('Min price cannot be greater than max');
+      setError('Min cannot exceed max');
       return;
     }
-
     dispatch({ type: 'SET_PRICE', payload: { min, max } });
   };
 
   return (
-    <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
-        Price Range
-      </label>
-      <div className="space-y-2">
+    <section>
+      <h3 className="text-sm font-semibold text-[#111827] mb-4">Price Range</h3>
+      <div className="flex gap-3 mb-4">
         <input
           type="number"
-          placeholder="Min Price"
+          placeholder="Min"
           value={minInput}
           onChange={(e) => setMinInput(e.target.value)}
-          onBlur={handlePriceChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-9 px-3 rounded-lg border border-[#e5e7eb] text-sm text-[#111827] placeholder-gray-500 outline-none focus:border-[#2d6bcf] focus:ring-1 focus:ring-[#2d6bcf] transition-colors"
         />
         <input
           type="number"
-          placeholder="Max Price"
+          placeholder="Max"
           value={maxInput}
           onChange={(e) => setMaxInput(e.target.value)}
-          onBlur={handlePriceChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-9 px-3 rounded-lg border border-[#e5e7eb] text-sm text-[#111827] placeholder-gray-500 outline-none focus:border-[#2d6bcf] focus:ring-1 focus:ring-[#2d6bcf] transition-colors"
         />
-        {error && <p className="text-red-600 text-sm">{error}</p>}
       </div>
-    </div>
+      {error && <p className="text-red-500 text-xs mb-3">{error}</p>}
+      <button
+        onClick={handleApply}
+        className="w-full h-10 bg-[#2d6bcf] hover:bg-[#2560b8] text-white text-sm font-semibold rounded-lg transition-colors"
+      >
+        Apply
+      </button>
+    </section>
   );
 };
 

@@ -1,126 +1,135 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { useProductDetail } from '../hooks/useProductDetail';
-import { formatPrice, formatRating } from '../utils/formatters';
-import ErrorMessage from '../components/ErrorMessage';
+import StarRating from '../components/StarRating';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { product, loading, error, retry } = useProductDetail(id!);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const previewImage = activeImage ?? (product?.images?.[0] ?? product?.thumbnail);
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-16">
         <LoadingSpinner />
-      </div>
+      </main>
     );
   }
 
   if (error || !product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-16">
         <ErrorMessage message={error || 'Product not found'} onRetry={retry} />
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-4 text-blue-600 hover:underline"
-        >
-          ← Back to Listing
+        <button onClick={() => navigate(-1)} className="mt-4 text-[#2d6bcf] text-sm hover:underline">
+          ← Back
         </button>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-blue-600 hover:underline mb-6"
-        >
-          ← Back to Listing
-        </button>
+    <main className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-sm text-[#111827] border border-[#e5e7eb] bg-white rounded-lg px-4 py-2 mb-6 hover:bg-[#f3f4f6] transition-colors"
+      >
+        <ArrowLeft size={16} />
+        Back
+      </button>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-            {/* Image Section */}
-            <div className="max-w-md">
-              <img
-                src={product.thumbnail}
-                alt={product.title}
-                className="w-full h-auto object-contain rounded-lg"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300?text=Image+Unavailable';
-                }}
-              />
-              {product.images && product.images.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 mt-4">
-                  {product.images.slice(0, 4).map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`${product.title} ${idx + 1}`}
-                      className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-75"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80';
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Details Section */}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {product.title}
-              </h1>
-              <div className="flex items-center gap-4 mb-4">
-                <span className="text-3xl font-bold text-blue-600">
-                  {formatPrice(product.price)}
-                </span>
-                <span className="text-lg text-gray-600">
-                  {formatRating(product.rating)}
-                </span>
-              </div>
-
-              <div className="space-y-4 mb-6 pb-6 border-b border-gray-200">
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700">Brand</h3>
-                  <p className="text-gray-600">{product.brand}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700">Category</h3>
-                  <p className="text-gray-600 capitalize">{product.category}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700">Stock</h3>
-                  <p className={product.stock > 0 ? 'text-green-600' : 'text-red-600'}>
-                    {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Description
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
-
-              <button
-                disabled={product.stock === 0}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
-              </button>
-            </div>
+      {/* Detail card */}
+      <div className="bg-white rounded-xl border border-[#e5e7eb] p-6 sm:p-10 flex flex-col md:flex-row gap-10">
+        {/* Image */}
+        <div className="flex flex-col gap-3 md:w-80 shrink-0">
+          <div className="flex items-center justify-center bg-[#f9fafb] rounded-xl p-6 min-h-72">
+            <img
+              src={previewImage}
+              alt={product.title}
+              className="max-h-64 max-w-full object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300?text=Image';
+              }}
+            />
           </div>
+
+          {/* Thumbnail strip */}
+          {product.images && product.images.length > 1 && (
+            <div className="flex gap-2 flex-wrap">
+              {product.images.slice(0, 5).map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveImage(img)}
+                  className={`w-14 h-14 rounded-lg border-2 overflow-hidden flex-shrink-0 transition-colors ${previewImage === img
+                    ? 'border-[#2d6bcf]'
+                    : 'border-[#e5e7eb] hover:border-gray-400'
+                    }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.title} view ${idx + 1}`}
+                    className="w-full h-full object-contain p-1"
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/56'; }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="flex flex-col gap-4 flex-1">
+          <h1 className="text-2xl font-bold text-[#111827]">{product.title}</h1>
+
+          <div className="flex items-center gap-4">
+            <span className="text-2xl font-bold text-[#111827]">${product.price.toFixed(2)}</span>
+            <StarRating rating={product.rating} count={product.rating} size={18} />
+          </div>
+
+          <div className="flex flex-col gap-1 text-sm">
+            {product.brand && (
+              <p>
+                <span className="font-semibold text-[#111827]">Brand: </span>
+                <span className="text-[#6b7280]">{product.brand}</span>
+              </p>
+            )}
+            <p>
+              <span className="font-semibold text-[#111827]">Category: </span>
+              <span className="text-[#6b7280] capitalize">{product.category}</span>
+            </p>
+            {product.stock !== undefined && (
+              <p>
+                <span className="font-semibold text-[#111827]">Stock: </span>
+                <span className={product.stock > 0 ? 'text-green-600' : 'text-red-500'}>
+                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                </span>
+              </p>
+            )}
+          </div>
+
+          <hr className="border-[#e5e7eb]" />
+
+          <div>
+            <h2 className="text-lg font-bold text-[#111827] mb-2">Description</h2>
+            <p className="text-sm text-[#6b7280] leading-relaxed">{product.description}</p>
+          </div>
+
+          <hr className="border-[#e5e7eb]" />
+
+          <button
+            disabled={product.stock === 0}
+            className="w-full h-11 bg-[#2d6bcf] hover:bg-[#2560b8] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors text-sm mt-auto"
+          >
+            {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+          </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

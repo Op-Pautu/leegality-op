@@ -6,12 +6,13 @@ const initialState: FilterState = {
   priceRange: { min: 0, max: Infinity },
   selectedBrands: new Set(),
   currentPage: 1,
+  searchQuery: '',
 };
 
 const filterReducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {
     case 'SET_CATEGORY':
-      return { ...state, selectedCategory: action.payload, currentPage: 1 };
+      return { ...state, selectedCategory: action.payload, currentPage: 1, searchQuery: '' };
     case 'SET_PRICE':
       return { ...state, priceRange: action.payload, currentPage: 1 };
     case 'TOGGLE_BRAND': {
@@ -25,6 +26,8 @@ const filterReducer = (state: FilterState, action: FilterAction): FilterState =>
     }
     case 'SET_PAGE':
       return { ...state, currentPage: action.payload };
+    case 'SET_SEARCH':
+      return { ...state, searchQuery: action.payload, currentPage: 1, selectedCategory: null };
     case 'RESET_FILTERS':
       return initialState;
     default:

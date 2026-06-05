@@ -7,37 +7,29 @@ interface BrandFilterProps {
 const BrandFilter: React.FC<BrandFilterProps> = ({ brands }) => {
   const { state, dispatch } = useFilters();
 
-  const handleBrandToggle = (brand: string) => {
-    dispatch({ type: 'TOGGLE_BRAND', payload: brand });
-  };
-
-  if (brands.length === 0) {
-    return (
-      <div className="text-gray-500 text-sm">
-        No brands available
-      </div>
-    );
-  }
+  if (brands.length === 0) return null;
 
   return (
-    <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
-        Brand
-      </label>
-      <div className="space-y-2 max-h-48 overflow-y-auto">
+    <section>
+      <h3 className="text-sm font-semibold text-[#111827] mb-4">Brands</h3>
+      <ul className="flex flex-col gap-3">
         {brands.map((brand) => (
-          <label key={brand} className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={state.selectedBrands.has(brand)}
-              onChange={() => handleBrandToggle(brand)}
-              className="rounded border-gray-300 cursor-pointer"
-            />
-            <span className="text-sm text-gray-700">{brand}</span>
-          </label>
+          <li key={brand}>
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={state.selectedBrands.has(brand)}
+                onChange={() => dispatch({ type: 'TOGGLE_BRAND', payload: brand })}
+                className="w-4 h-4 rounded border-gray-300 accent-[#2d6bcf] cursor-pointer"
+              />
+              <span className="text-sm text-[#6b7280] group-hover:text-[#111827] transition-colors">
+                {brand}
+              </span>
+            </label>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
